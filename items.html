@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html dir="rtl">
+
+<head>
+	<meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title id="title">مدير متجر</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet" />    
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+	<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css" integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe" crossorigin="anonymous">
+
+<!-- jQuery and JS bundle w/ Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.rtlcss.com/bootstrap/v4.5.3/js/bootstrap.bundle.min.js" integrity="sha384-40ix5a3dj6/qaC7tfz0Yr+p9fqWLzzAXiwxVLt9dw7UjQzGYw6rWRhFAnRapuQyK" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/0faf04db21.js" crossorigin="anonymous"></script>
+</head>
+
+<script>
+	let state = sessionStorage.getItem("id");
+	if (state == null) {
+		window.location = 'auth.html'
+		
+	}
+</script>
+
+<!-- comment above when you test! -->
+<!--
+
+Simple House
+
+https://templatemo.com/tm-539-simple-house
+
+-->
+<body> 
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+	  
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  <ul class="navbar-nav mr-auto">
+			<li class="nav-item ">
+			  <a class="nav-link" href="sec.html">الاقسام الأساسية <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item active">
+			  <a class="nav-link" href="items.html">الوجبات</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="detailstit.html">عناوين الاقسام الفرعية</a>
+			</li>
+            <li class="nav-item">
+				<a class="nav-link" href="details.html">العناصر الفرعية</a>
+			</li>
+            <li class="nav-item">
+				<a class="nav-link" href="addshopui.html">واجهة الموقع</a>
+			</li>
+
+			
+		  </ul>
+		  
+		</div>
+	  </nav>
+
+
+	  <div class="container px-3 my-5 clearfix">
+        <!-- Shopping cart table -->
+        <div class="card">
+            <div class="card-header">
+                <h2 dir="rtl">الوجبات</h2>
+            </div>
+            <div class="card-body">
+
+				<div class="table-responsive">
+					<div>
+                        <hr>
+                        <a id="add" type="button" class="btn btn-success">اضافة وجبة جديدة </a>
+
+                    </div>
+					<hr>
+					<table class="table table-bordered m-0">
+					  <thead>
+						<tr>
+						  <!-- Set columns width -->
+						  <th class="text-center py-3 px-4" >اسم الوجبة</th>
+						  <th class="text-center py-3 px-4" >ترتيبه في قائمة الطعام</th>
+                          <th class="text-center py-3 px-4" >القسم الرئيسي التابعه له</th>
+                          <th class="text-center py-3 px-4" >السعر</th>
+                          <th class="text-center py-3 px-4" >الصورة</th>
+                          <th class="text-center py-3 px-4" >الوصف</th>
+
+                          
+
+
+
+						  <!-- <th class="text-right py-3 px-4" >المجموع</th> -->
+						  <th  colspan="2"  class="text-center py-3 px-4">إجراءات</th>
+						  
+						</tr>
+					  </thead>
+					  <tbody id="mybody">
+			  
+					
+			  
+					   
+					  </tbody>
+					</table>
+
+                   
+				  </div>
+
+
+			</div>
+		</div>
+	  </div>
+
+	  <style>
+		.box {
+  float: left;
+  height: 20px;
+  width: 20px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+  clear: both;
+
+}
+	  </style>
+
+	
+
+	
+		
+		
+	
+	</div>
+	
+
+	<script>
+		 function getQueryParams(qs) {
+         qs = qs.split('+').join(' ');
+
+           var params = {},
+           tokens,
+           re = /[?&]?([^=]+)=([^&]*)/g;
+
+            while (tokens = re.exec(qs)) {
+                params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+            }
+
+          return params;
+         }
+
+         
+	</script>
+
+	<!-- use the below script outside github -->
+	<script type="module">
+
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+		import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+		import { getFirestore , collection, query, where, getDocs , doc, getDoc ,onSnapshot, updateDoc , deleteDoc} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+		
+			
+
+		
+
+//   if (localStorage.getItem("firsttime") == null) {
+
+	var id = sessionStorage.getItem('id');
+
+	const firebaseConfig = {
+		  apiKey: "AIzaSyCXBoacFAwjCLeH1vRNO67XGfdG_eJjO7k",
+		  authDomain: "qride-9fa6f.firebaseapp.com",
+		  projectId: "qride-9fa6f",
+		  storageBucket: "qride-9fa6f.appspot.com",
+		  messagingSenderId: "632703434000",
+		  appId: "1:632703434000:web:c2d133c8b4cfffd8ef3995",
+		  measurementId: "G-VQTB8R1VHC",
+		//   databaseURL: "https://qride-9fa6f-europe-west2.firebaseio.com/"
+		};
+
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const analytics = getAnalytics(app);
+		const db = getFirestore(app);
+
+        var items = [];
+		var num = 0;
+	
+
+
+		const q = query(collection(db, "menu", id, "items"));
+		
+			const notDone = onSnapshot(q, (querySnapshot) => {
+				// let order = localStorage.getItem("order");
+
+				
+				
+				
+				querySnapshot.forEach((doc) => {
+
+					console.log(doc.id);
+
+					var obj = doc.data();
+
+
+					var newNum = "id";
+					var newVal = doc.id;
+
+
+					obj[newNum] = newVal;
+
+					
+					items[num++] = obj;
+					
+					
+				});
+
+                for (let index = 0; index < items.length; index++) {
+
+                    var html = '<tr> <td class="p-4">  <div class="media align-items-center">  <div class="media-body">  <a href="#" class="d-block text-dark">' + items[index].name + '</a> </div></div></td> <td class="align-middle p-4">' + items[index].sort + '</td>  <td class="p-4">  <div class="media align-items-center">  <div class="media-body">  <a href="#" class="d-block text-dark">' + items[index]['sections-tag'] + '</a> </div></div></td>  <td class="p-4">  <div class="media align-items-center">  <div class="media-body">  <a href="#" class="d-block text-dark">' + items[index].price + '</a> </div></div></td>  <td class="p-4">  <div class="media align-items-center">  <div class="media-body">  <a  type="button" href="'+items[index].imgpath+'" class="btn btn-dark">الصورة</a> </div></div></td>   <td class="p-4">  <div class="media align-items-center">  <div class="media-body">  <a href="#" class="d-block text-dark">' + items[index].des + '</a> </div></div></td>                             <td class="text-center align-middle px-0"><a href="' + items[index].id + '" class="btn edit" ><i class="fa-solid fa-pen-nib update edit"></i></a></td> <td class="text-center align-middle px-0"><a href="' + items[index].id + '" class="btn del" > <i class="fas fa-trash del"></i></a></td></tr>';
+                    html = $.parseHTML(html);
+                    $("#mybody").append(html);
+                }
+
+
+                $('.edit').click(function (e) {
+                    e.preventDefault();
+                    if (this.href != undefined) {
+                        var idarr = this.href.split('/'); // in prod maybe put \
+                        var id = idarr[idarr.length - 1];
+                        window.location = 'additem.html?givenid=' + id;
+
+
+
+
+
+                    }
+                });
+
+
+
+				$('.del').click(async function (e) {
+                    e.preventDefault();
+                    if (this.href != undefined) {
+                        var idarr = this.href.split('/'); // in prod maybe put \
+                        var docid = idarr[idarr.length - 1];
+						await deleteDoc(doc(db, "menu", id , "items" , docid));
+
+						Swal.fire('تأكد من حذف جميع عناوين الاقسام الفرعية المتعلقة بهذه الوجبة', '', 'success').then(e => {
+							location.reload();
+						});
+						
+
+
+
+
+
+                    }
+                });
+
+
+
+
+				
+			});
+
+
+
+
+
+
+
+		
+
+        $('#add').click(function(e){
+			e.preventDefault();
+			window.location = 'additem.html';
+
+		
+		});
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+// here define first time
+        // localStorage.setItem("firsttime", false);
+		
+		// }
+
+
+
+		
+
+		
+
+	  </script>
+
+
+<script>
+	// delete this one
+
+	var first = localStorage.getItem('first');
+	if (first == null) {
+		localStorage.setItem('first', true)
+		location.reload();
+
+	}
+</script>
+
+
+
+</body>
+</html>

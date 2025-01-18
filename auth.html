@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html dir="rtl">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>auth</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" />
+
+	
+	<!-- CSS -->
+<link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css" integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe" crossorigin="anonymous">
+
+<!-- jQuery and JS bundle w/ Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.rtlcss.com/bootstrap/v4.5.3/js/bootstrap.bundle.min.js" integrity="sha384-40ix5a3dj6/qaC7tfz0Yr+p9fqWLzzAXiwxVLt9dw7UjQzGYw6rWRhFAnRapuQyK" crossorigin="anonymous"></script>
+</head>
+<!--
+
+Simple House
+
+https://templatemo.com/tm-539-simple-house
+
+-->
+
+<body>
+    <div>
+        <h1></h1>
+    </div>
+
+    <div class="container">
+        <form>
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              
+              <label class="form-label" for="form2Example1">البريد الالكتروني</label>
+              <input type="email" id="email" class="form-control" />
+            </div>
+          
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+                <label class="form-label" for="form2Example2">كلمة المرور</label>
+
+              <input type="password" id="pass" class="form-control" />
+            </div>
+          
+            <!-- 2 column grid layout for inline styling -->
+            <div class="row mb-4">
+              <div class="col d-flex justify-content-center">
+                <!-- Checkbox -->
+                
+              </div>
+          
+              
+            </div>
+          
+            <!-- Submit button -->
+            <button id="mybtn" type="button" class="btn btn-primary btn-block mb-4">تسجيل الدخول</button>
+          
+            <!-- Register buttons -->
+            <div class="text-center">
+              <!-- <p>Not a member? <a href="#!">Register</a></p> -->
+              
+            </div>
+          </form>
+
+    </div>
+
+   
+
+	
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/parallax.min.js"></script>
+
+
+
+
+	<script type="module">
+
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+		import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+		import { getFirestore, collection, query, where,onSnapshot, doc, setDoc  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+
+		// import { getDatabase , ref, set, onValue} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+
+
+		const firebaseConfig = {
+			apiKey: "AIzaSyCXBoacFAwjCLeH1vRNO67XGfdG_eJjO7k",
+			authDomain: "qride-9fa6f.firebaseapp.com",
+			projectId: "qride-9fa6f",
+			storageBucket: "qride-9fa6f.appspot.com",
+			messagingSenderId: "632703434000",
+			appId: "1:632703434000:web:c2d133c8b4cfffd8ef3995",
+			measurementId: "G-VQTB8R1VHC",
+			//   databaseURL: "https://qride-9fa6f-europe-west2.firebaseio.com/"
+		};
+
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		const analytics = getAnalytics(app);
+		const db = getFirestore(app);
+    const auth = getAuth(app);
+
+
+    
+
+
+        $('#mybtn').click(function (e) {
+			e.preventDefault();
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user.uid;
+                    console.log(user);
+                    const q = query(collection(db, "superadmins"), where("uid", "==", user));
+                    const notDone = onSnapshot(q, (querySnapshot) => {
+
+                        querySnapshot.forEach(async (docres) => {
+                            console.log(docres.data().shopid);
+                            sessionStorage.setItem('id', docres.data().shopid);
+
+                            var shopid = docres.data().shopid;
+
+
+                             // to resolve error for the clint
+
+                          const docRef = await setDoc(doc(db, "menu", shopid), {
+                            id: shopid,
+                            status: 'open',
+                            version: '1'
+                          });
+
+
+                       
+                          
+          
+                            // Code to run after the pause
+                            window.location = 'sec.html';     
+
+                            
+                        });
+                    });
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
+		});
+
+
+
+
+		
+
+	</script>
+</body>
+
+</html>
